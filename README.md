@@ -37,31 +37,31 @@ Prerequisites:
 
 Install dependencies:
 
-   npm install
+npm install
 
 Start Metro:
 
-   npm start
+npm start
 
 Run on Android:
 
-   npm run android
+npm run android
 
 Run on iOS:
 
-   npm run ios
+npm run ios
 
 ## Project Structure
 
-   src/
-     api/          API calls
-     components/   reusable UI components
-     hooks/        typed Redux hooks
-     navigation/   navigation setup and types
-     screens/      app screens
-     storage/      local cache helpers
-     store/        Redux store and slice
-     types/        shared TypeScript types
+src/
+api/ API calls
+components/ reusable UI components
+hooks/ typed Redux hooks
+navigation/ navigation setup and types
+screens/ app screens
+storage/ local cache helpers
+store/ Redux store and slice
+types/ shared TypeScript types
 
 ## Notes
 
@@ -74,3 +74,9 @@ Run on iOS:
 - Improve offline and retry handling
 - Add stronger loading and empty states
 - Add end-to-end testing
+
+## Quick Links
+
+- APK: https://drive.google.com/file/d/1g9uIhiUbkWE-9Re8n-dkrMunPtgT6scN/view?usp=sharing
+- Demo video: https://drive.google.com/drive/folders/1CBy8My-uOoi3j32a5gsO-XAcY8zN-wV9?usp=sharing
+- Screenshots: https://drive.google.com/drive/folders/1R5oqpZaxq10ciaNUqk3fC_jTBFZqCFZY?usp=sharing
