@@ -1,84 +1,76 @@
-# Simple Mobile App (Educase Assignment)
+# Simple Mobile App
 
-A React Native (CLI) + TypeScript app built for the fresher assignment.
+This is my React Native project built with React Native CLI and TypeScript.
 
-## What The App Does
+The app is a simple product catalog that loads data from a public API and handles common real app scenarios like search, pagination, state management, and restoring data after restart.
 
-- Shows a large product list from a public API (`dummyjson.com`)
-- Supports search with debounced input
-- Supports infinite scrolling pagination
-- Uses Redux Toolkit for centralized state management
-- Persists fetched data and list state in local storage (AsyncStorage)
-- Restores previous content after app restart
-- Handles app lifecycle transitions (`active`, `background`, `inactive`)
+## Features
 
-## Screens
+- Product list from a public API
+- Search with debounce
+- Infinite scrolling pagination
+- New Arrivals section on the list screen
+- Product detail screen
+- App insights screen (state and lifecycle snapshot)
+- Redux Toolkit for state management
+- Local storage persistence with AsyncStorage
+- App lifecycle handling for active, inactive, and background states
+- INR price display in list and detail views
 
-- `Catalog` (main list + search + infinite scroll)
-- `Product Detail` (selected item details)
-- `App Insights` (state snapshot and lifecycle info)
+## Tech Used
 
-## Tech Stack
-
-- React Native CLI (`0.74.5`)
+- React Native CLI (no Expo)
 - TypeScript
-- React Hooks + Functional Components
+- React Hooks
 - Redux Toolkit + React Redux
-- React Navigation (Native Stack)
-- AsyncStorage for persistence
+- React Navigation
+- AsyncStorage
 
-## Run Locally
+## How to Run
 
-Prerequisite: React Native environment setup for Android/iOS.
+Prerequisites:
 
-```bash
-npm install
-```
+- Node.js 18+
+- React Native environment setup
+- For Android: Android Studio, SDK, and emulator/device
+- For iOS: macOS with Xcode
+
+Install dependencies:
+
+   npm install
 
 Start Metro:
 
-```bash
-npm start
-```
+   npm start
 
-Run Android:
+Run on Android:
 
-```bash
-npm run android
-```
+   npm run android
 
-Run iOS:
+Run on iOS:
 
-```bash
-npm run ios
-```
+   npm run ios
 
 ## Project Structure
 
-```text
-src/
-   api/                # API requests
-   components/         # Reusable UI blocks
-   hooks/              # Typed redux hooks
-   navigation/         # Stack navigator and nav types
-   screens/            # App screens
-   storage/            # AsyncStorage cache helpers
-   store/              # Redux store + slice
-   types/              # Shared TypeScript types
-```
+   src/
+     api/          API calls
+     components/   reusable UI components
+     hooks/        typed Redux hooks
+     navigation/   navigation setup and types
+     screens/      app screens
+     storage/      local cache helpers
+     store/        Redux store and slice
+     types/        shared TypeScript types
 
-## Key Technical Decisions
+## Notes
 
-- `FlatList` with tuned props (`initialNumToRender`, `windowSize`, `removeClippedSubviews`) for smoother performance.
-- API pagination done with `skip` + `limit` and appended results.
-- Search handled with local input state and debounce to avoid API spam.
-- Redux slice keeps UI-friendly state (`loading`, `refreshing`, `hasMore`, `error`, `lastUpdated`, `appState`).
-- Cache saves list state (`items`, `page`, `query`, `hasMore`, `lastUpdated`) and hydrates on app launch.
+- UI is intentionally kept clean and simple.
+- Focus is on code structure, state flow, performance basics, and reliability.
 
-## Improvements With More Time
+## If I Had More Time
 
-- Add unit/integration tests for slice logic and critical UI flows.
-- Add retry strategy and offline banner for weak network scenarios.
-- Add image placeholders and graceful loading states for slow connections.
-- Add E2E tests (Detox) for search + pagination + restore flow.
-- Add analytics events for lifecycle and list interactions.
+- Add tests for reducers and screen flows
+- Improve offline and retry handling
+- Add stronger loading and empty states
+- Add end-to-end testing
