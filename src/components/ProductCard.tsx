@@ -11,6 +11,8 @@ export default function ProductCard({
   product,
   onPress,
 }: ProductCardProps): React.JSX.Element {
+  const priceInInr = `₹${Math.round(product.price * 83).toLocaleString('en-IN')}`;
+
   return (
     <Pressable style={styles.card} onPress={() => onPress(product.id)}>
       <Image source={{uri: product.thumbnail}} style={styles.image} />
@@ -22,7 +24,7 @@ export default function ProductCard({
         <Text style={styles.description} numberOfLines={2}>
           {product.description}
         </Text>
-        <Text style={styles.price}>${product.price}</Text>
+        <Text style={styles.price}>{priceInInr}</Text>
       </View>
     </Pressable>
   );

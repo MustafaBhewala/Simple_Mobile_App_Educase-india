@@ -14,9 +14,9 @@ export default function ProductDetailScreen({route}: Props): React.JSX.Element {
 
   const priceText = useMemo(() => {
     if (!product) {
-      return '$0';
+      return '₹0';
     }
-    return `$${product.price}`;
+    return `₹${Math.round(product.price * 83).toLocaleString('en-IN')}`;
   }, [product]);
 
   if (!product) {
