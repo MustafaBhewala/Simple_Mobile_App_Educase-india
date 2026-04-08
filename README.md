@@ -1,79 +1,84 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Simple Mobile App (Educase Assignment)
 
-# Getting Started
+A React Native (CLI) + TypeScript app built for the fresher assignment.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## What The App Does
 
-## Step 1: Start the Metro Server
+- Shows a large product list from a public API (`dummyjson.com`)
+- Supports search with debounced input
+- Supports infinite scrolling pagination
+- Uses Redux Toolkit for centralized state management
+- Persists fetched data and list state in local storage (AsyncStorage)
+- Restores previous content after app restart
+- Handles app lifecycle transitions (`active`, `background`, `inactive`)
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Screens
 
-To start Metro, run the following command from the _root_ of your React Native project:
+- `Catalog` (main list + search + infinite scroll)
+- `Product Detail` (selected item details)
+- `App Insights` (state snapshot and lifecycle info)
+
+## Tech Stack
+
+- React Native CLI (`0.74.5`)
+- TypeScript
+- React Hooks + Functional Components
+- Redux Toolkit + React Redux
+- React Navigation (Native Stack)
+- AsyncStorage for persistence
+
+## Run Locally
+
+Prerequisite: React Native environment setup for Android/iOS.
 
 ```bash
-# using npm
+npm install
+```
+
+Start Metro:
+
+```bash
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
+Run Android:
 
 ```bash
-# using npm
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### For iOS
+Run iOS:
 
 ```bash
-# using npm
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## Project Structure
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```text
+src/
+   api/                # API requests
+   components/         # Reusable UI blocks
+   hooks/              # Typed redux hooks
+   navigation/         # Stack navigator and nav types
+   screens/            # App screens
+   storage/            # AsyncStorage cache helpers
+   store/              # Redux store + slice
+   types/              # Shared TypeScript types
+```
 
-## Step 3: Modifying your App
+## Key Technical Decisions
 
-Now that you have successfully run the app, let's modify it.
+- `FlatList` with tuned props (`initialNumToRender`, `windowSize`, `removeClippedSubviews`) for smoother performance.
+- API pagination done with `skip` + `limit` and appended results.
+- Search handled with local input state and debounce to avoid API spam.
+- Redux slice keeps UI-friendly state (`loading`, `refreshing`, `hasMore`, `error`, `lastUpdated`, `appState`).
+- Cache saves list state (`items`, `page`, `query`, `hasMore`, `lastUpdated`) and hydrates on app launch.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+## Improvements With More Time
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- Add unit/integration tests for slice logic and critical UI flows.
+- Add retry strategy and offline banner for weak network scenarios.
+- Add image placeholders and graceful loading states for slow connections.
+- Add E2E tests (Detox) for search + pagination + restore flow.
+- Add analytics events for lifecycle and list interactions.

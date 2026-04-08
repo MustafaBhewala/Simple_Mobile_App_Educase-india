@@ -1,117 +1,109 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useEffect} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
+  ActivityIndicator,
+  AppState,
+  AppStateStatus,
   StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
 } from 'react-native';
-
+import {Provider} from 'react-redux';
+import AppNavigator from './src/navigation/AppNavigator';
+import {useAppDispatch, useAppSelector} from './src/hooks/storeHooks';
+import {store} from './src/store';
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  hydrateProductsState,
+  markHydrated,
+  setAppLifecycleState,
+} from './src/store/slices/productsSlice';
+import {
+  loadProductsCache,
+  saveProductsCache,
+} from './src/storage/productsCache';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+function AppBootstrap(): React.JSX.Element {
+  const dispatch = useAppDispatch();
+  const {items, page, query, hasMore, lastUpdated, hydrated} = useAppSelector(
+    state => state.products,
   );
+
+  useEffect(() => {
+    const hydrate = async () => {
+      const cache = await loadProductsCache();
+      if (cache) {
+        dispatch(hydrateProductsState(cache));
+        return;
+      }
+      dispatch(markHydrated());
+    };
+
+    hydrate();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      saveProductsCache({
+        items,
+        page,
+        query,
+        hasMore,
+        lastUpdated,
+      }).catch(() => null);
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [hasMore, hydrated, items, lastUpdated, page, query]);
+
+  useEffect(() => {
+    const applyAppState = (nextAppState: AppStateStatus) => {
+      if (
+        nextAppState === 'active' ||
+        nextAppState === 'background' ||
+        nextAppState === 'inactive'
+      ) {
+        dispatch(setAppLifecycleState(nextAppState));
+      }
+    };
+
+    applyAppState(AppState.currentState);
+    const subscription = AppState.addEventListener('change', applyAppState);
+
+    return () => {
+      subscription.remove();
+    };
+  }, [dispatch]);
+
+  if (!hydrated) {
+    return (
+      <View style={styles.loaderContainer}>
+        <StatusBar barStyle="dark-content" backgroundColor="#F3F6FC" />
+        <ActivityIndicator size="large" color="#1D3AA8" />
+      </View>
+    );
+  }
+
+  return <AppNavigator />;
 }
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Provider store={store}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F3F6FC" />
+      <AppBootstrap />
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F3F6FC',
   },
 });
 
