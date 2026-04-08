@@ -11,7 +11,9 @@ export default function ProductCard({
   product,
   onPress,
 }: ProductCardProps): React.JSX.Element {
-  const priceInInr = `₹${Math.round(product.price * 83).toLocaleString('en-IN')}`;
+  const priceInInr = `₹${Math.round(product.price * 83).toLocaleString(
+    'en-IN',
+  )}`;
 
   return (
     <Pressable style={styles.card} onPress={() => onPress(product.id)}>

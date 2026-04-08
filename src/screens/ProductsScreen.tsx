@@ -2,8 +2,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   ListRenderItem,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -79,6 +81,11 @@ export default function ProductsScreen({navigation}: Props): React.JSX.Element {
     );
   }, [isLoading]);
 
+  const newArrivals = useMemo(
+    () => [...items].sort((a, b) => b.id - a.id).slice(0, 6),
+    [items],
+  );
+
   const emptyState = !isLoading && items.length === 0;
 
   return (
@@ -112,6 +119,41 @@ export default function ProductsScreen({navigation}: Props): React.JSX.Element {
         onEndReachedThreshold={0.6}
         refreshing={isRefreshing}
         onRefresh={onRefresh}
+        ListHeaderComponent={
+          query.trim().length === 0 && newArrivals.length > 0 ? (
+            <View style={styles.newSection}>
+              <Text style={styles.newSectionTitle}>New Arrivals</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.newScrollContent}>
+                {newArrivals.map(product => {
+                  const inrPrice = `₹${Math.round(
+                    product.price * 83,
+                  ).toLocaleString('en-IN')}`;
+
+                  return (
+                    <Pressable
+                      key={product.id}
+                      style={styles.newItemCard}
+                      onPress={() =>
+                        navigation.navigate('ProductDetail', {id: product.id})
+                      }>
+                      <Image
+                        source={{uri: product.thumbnail}}
+                        style={styles.newItemImage}
+                      />
+                      <Text numberOfLines={1} style={styles.newItemTitle}>
+                        {product.title}
+                      </Text>
+                      <Text style={styles.newItemPrice}>{inrPrice}</Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          ) : null
+        }
         ListFooterComponent={footer}
         ListEmptyComponent={
           emptyState ? (
@@ -176,6 +218,45 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 10,
+  },
+  newSection: {
+    marginBottom: 12,
+  },
+  newSectionTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#101828',
+    marginBottom: 8,
+  },
+  newScrollContent: {
+    paddingRight: 6,
+  },
+  newItemCard: {
+    width: 124,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#DEE6F4',
+    borderRadius: 12,
+    padding: 8,
+    marginRight: 8,
+  },
+  newItemImage: {
+    width: '100%',
+    height: 74,
+    borderRadius: 8,
+    backgroundColor: '#EDF2FC',
+  },
+  newItemTitle: {
+    marginTop: 8,
+    fontSize: 12,
+    color: '#111827',
+    fontWeight: '700',
+  },
+  newItemPrice: {
+    marginTop: 4,
+    fontSize: 12,
+    color: '#1D3AA8',
+    fontWeight: '700',
   },
   footerLoader: {
     paddingVertical: 16,
