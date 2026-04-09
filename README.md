@@ -75,8 +75,8 @@ types/ shared TypeScript types
 - Add stronger loading and empty states
 - Add end-to-end testing
 
-## Quick Links
+## Quick k on mobile phoneLinks
 
-- APK: https://drive.google.com/file/d/1g9uIhiUbkWE-9Re8n-dkrMunPtgT6scN/view?usp=sharing
+- APK: https://drive.google.com/file/d/1bzbGTsQO-j7AVRIA57peorD6XFmB8Uxc/view?usp=sharing
 - Demo video: https://drive.google.com/drive/folders/1CBy8My-uOoi3j32a5gsO-XAcY8zN-wV9?usp=sharing
 - Screenshots: https://drive.google.com/drive/folders/1R5oqpZaxq10ciaNUqk3fC_jTBFZqCFZY?usp=sharing
